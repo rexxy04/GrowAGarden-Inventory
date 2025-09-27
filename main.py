@@ -1,10 +1,7 @@
-# file: main.py
-
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 
-# Impor kelas-kelas halaman dari file terpisah
-from home_page import HomePage # Asumsi Anda juga memisahkan HomePage
+from home_page import HomePage
 from inventory_page import InventoryPage
 from transfer_page import TransferPage
 
@@ -35,11 +32,12 @@ class MainWindow(QMainWindow):
         self.transfer_page.home_button.clicked.connect(self.go_to_home)
 
     def go_to_inventory(self):
-        self.inventory_page.load_accounts() # Muat data saat halaman dibuka
+        self.inventory_page.load_accounts() # load data saat halaman dibuka
+        self.inventory_page.load_master_pets_to_combobox() # load data master pet ke combobox
         self.stacked_widget.setCurrentIndex(1)
 
     def go_to_transfer(self):
-        self.transfer_page.load_all_accounts() # Muat data saat halaman dibuka
+        self.transfer_page.load_all_accounts() # load data saat halaman dibuka
         self.stacked_widget.setCurrentIndex(2)
 
     def go_to_home(self):
@@ -48,8 +46,6 @@ class MainWindow(QMainWindow):
 # Jalankan Aplikasi
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    # Anda mungkin perlu membuat file home_page.py juga
-    # dengan memindahkan kelas HomePage ke sana.
     window = MainWindow()
     window.show()
     sys.exit(app.exec())

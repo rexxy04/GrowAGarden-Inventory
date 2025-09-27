@@ -152,3 +152,37 @@ def transfer_pet(pet_id, new_account_id):
     finally:
         if conn:
             conn.close()
+
+#function untuk master pet (daftar jenis pet yang bisa dipilih saat menambah pet baru)
+def get_master_pets():
+    """ fetch semua nama pet dari tabel master_pet"""
+    conn = create_connection()
+    if conn is not None:
+        try:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM master_pet ORDER BY nama_pet_master")
+            master_pets = cursor.fetchall()
+            return master_pets
+        except sqlite3.Error as e:
+            print(f"Error fetching master pets: {e}")
+            return []
+        finally:
+            conn.close()
+    return []
+
+def add_master_pet(name):
+    """ Menambahkan nama pet baru ke tabel master """
+    conn = create_connection()
+    sql = ''' INSERT INTO master_pet(nama_pet_master) VALUES(?) '''
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql, (name,))
+        conn.commit()
+        return cursor.lastrowid
+    except sqlite3.Error as e:
+        print(f"Error adding master pet: {e}")
+        return None
+    finally:
+        if conn:
+            conn.close()
