@@ -1,5 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
+import database
 
 from home_page import HomePage
 from inventory_page import InventoryPage
@@ -45,6 +46,7 @@ class MainWindow(QMainWindow):
 
 # Jalankan Aplikasi
 if __name__ == "__main__":
+    database.initialize_database()
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()

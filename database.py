@@ -2,6 +2,48 @@
 
 import sqlite3
 
+def initialize_database():
+    conn = create_connection()
+    if conn is not None:
+        try:
+            cursor = conn.cursor()
+            
+            #query untuk membuat tabel 'akun'
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS akun (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nama_akun TEXT NOT NULL
+                );
+            """)
+
+            # query untuk membuat tabel 'master_pet'
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS master_pet (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nama_pet_master TEXT NOT NULL UNIQUE
+                );
+            """)
+
+            # query untuk membuat tabel 'pets'
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS pets (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nama_pet TEXT NOT NULL,
+                    age_pet INTEGER,
+                    weight_pet REAL,
+                    akun_id INTEGER NOT NULL,
+                    FOREIGN KEY (akun_id) REFERENCES akun (id)
+                );
+            """)
+
+            conn.commit()
+            print("Database initialized successfully.")
+        except sqlite3.Error as e:
+            print(f"Error during database initialization: {e}")
+        finally:
+            conn.close()
+
+
 def create_connection(db_file="inventory.db"):
     """ Membuat koneksi database ke file SQLite """
     conn = None
